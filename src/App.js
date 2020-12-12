@@ -13,8 +13,6 @@ class  App extends Component {
     tracks: []
   };
 
-
-
   //1st API fetch uses the artistQuery to find the artist's details and id
   //After refactoring for the Search component, this function now has an input of artistQuery
   searchArtist = (artistQuery) => {
