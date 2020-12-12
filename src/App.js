@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Artist from './Components/Artist';
+import Search from './Components/Search';
 import Tracks from './Components/Tracks';
 
 const API_ADDRESS = 'https://spotify-api-wrapper.appspot.com';
@@ -8,21 +9,16 @@ class  App extends Component {
 
   //sets initial state
   state = {
-    artistQuery: '',
     artist: null,
     tracks: []
   };
 
-  //updates state's artistQuery based on the value that is entered into the search
-  updateArtistQuery = (event) => {
-    this.setState({
-      artistQuery: event.target.value
-    });
-  }
+
 
   //1st API fetch uses the artistQuery to find the artist's details and id
-  searchArtist = () => {
-    fetch(`${API_ADDRESS}/artist/${this.state.artistQuery}`)
+  //After refactoring for the Search component, this function now has an input of artistQuery
+  searchArtist = (artistQuery) => {
+    fetch(`${API_ADDRESS}/artist/${artistQuery}`)
       .then((response) => {
         return response.json();
       })
@@ -49,23 +45,14 @@ class  App extends Component {
       });
   }
 
-  //event handler for the search button
-  handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      this.searchArtist();
-    }
-  }
 
 
+  //the Search component is passing a callback function through it's props in order for the Search component to update the state of App.
   render() {
     return (
       <div>
         <h2>Music Master</h2>
-        <input 
-          onChange={this.updateArtistQuery}
-          onKeyPress={this.handleKeyPress}
-          placeholder='Search for an Artist' />
-        <button onClick={this.searchArtist}>Search</button>
+        <Search searchArtist={this.searchArtist}/>
         <Artist artist={this.state.artist}/>
         <Tracks tracks={this.state.tracks}/>
       </div>
